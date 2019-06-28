@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Photo Editor</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/cropper.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+   
+                <div class="container">
+                    <div class="container">
+                        <div class="row bk-2">
+                          <div class="col-md-12">
+                            <h3>Photo Editor</h3>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 bk-1">
+                            <div class="img-container">
+                              <img id="image" src="#">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 docs-buttons">
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="Zoom In">
+                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Zoom In">
+                                  <span class="fa fa-search-plus"></span>
+                                </span>
+                              </button>
+                              <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="Zoom Out">
+                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Zoom Out">
+                                  <span class="fa fa-search-minus"></span>
+                                </span>
+                              </button>
+                              <div class="btn-group">
+                                <button type="button" data-method="zoom" data-option="0" id="zoomBtn" hidden></button>
+                                <input type="range" min="-1" max="1" step="0.01" oninput="zoomMethod(this.value)"  id="zoomSlider" class="slider"/>
+                                <input type="number" id="zoomInputVal" value="" oninput="settingZoomInputVal(this.value)"/><span>%</span>
+                              </div>
+                            </div>
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Rotate Left">
+                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="$().cropper(&quot;rotate&quot;, -45)">
+                                  <span class="fa fa-rotate-left"></span>
+                                </span>
+                              </button>
+                              <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Rotate Right">
+                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="$().cropper(&quot;rotate&quot;, 45)">
+                                  <span class="fa fa-rotate-right"></span>
+                                </span>
+                              </button>
+                            </div>
+                            <div class="btn-group">
+                              <button type="button" data-method="rotate" data-option="0" id="rotateBtn" hidden></button>
+                              <input type="range" min="-45" max="45" step="2" oninput="rotate(this.value)"  id="rotateSlider" class="slider"/>
+                              <input type="number" id="rotateInputVal" value="" oninput="settingRotateInputVal(this.value)"/><span>Degree</span>
+                            </div>
+                    
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="Flip Horizontal">
+                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Flip Horizontal">
+                                  <span class="fa fa-arrows-h"></span>
+                                </span>
+                              </button>
+                              <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="Flip Vertical">
+                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Flip Vertical">
+                                  <span class="fa fa-arrows-v"></span>
+                                </span>
+                              </button>
+                            </div>
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-primary" data-method="reset" title="Reset" id="resetBtn">
+                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Reset">
+                                  <span class="fa fa-refresh"></span>
+                                </span>
+                              </button>
+                              <label class="btn btn-primary btn-upload" for="inputImage" title="Upload image file">
+                                <input type="file" class="sr-only" id="inputImage" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff">
+                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Import image with Blob URLs">
+                                  <span class="fa fa-upload"></span> Import Image
+                                </span>
+                              </label>
+                            </div>
+                            <div class="btn-group btn-group-crop">
+                              <button type="button" class="btn btn-success cutm-save" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 1200, &quot;height&quot;: 675 }">
+                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Save Image of size 1200X675">
+                                  Save Image
+                                </span>
+                              </button>
+                            </div>
+                            <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="getCroppedCanvasTitle">Cropped</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body"></div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">Download</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+
+
+ 
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+  <script src="js/cropper.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
